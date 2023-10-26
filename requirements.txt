@@ -2,4 +2,4 @@ cmake
 dlib
 face-recognition
 numpy
-opencv-python
+opencv-python==4.5.4.58
