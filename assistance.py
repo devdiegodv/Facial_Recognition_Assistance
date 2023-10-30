@@ -1,6 +1,7 @@
 from cv2 import cv2
 import face_recognition as fr
 import os
+import numpy
 
 # create database
 path = 'employes'
@@ -34,4 +35,42 @@ def codify(images):
     return codified_list
 
 codified_list_employes = codify(my_images)
-print(len(codified_list_employes))plññ{{{{{}}}}}
+
+# take screenshot from web cam
+capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+while True:
+    # read screenshot from web cam
+    success, image = capture.read()
+
+    cv2.imshow("Taking screenshot", image)
+
+    if not success:
+        print("Capture could not be taken")
+    else:
+        # recognize face in capture
+        face_capture = fr.face_locations(image)
+
+        # codify face captured
+        codified_face_capture = fr.face_encodings(image, face_capture)
+
+        # search matches
+        for facecodified, facelocation in zip(codified_face_capture, face_capture):
+            matches = fr.compare_faces(codified_list_employes, facecodified)
+            distances = fr.face_distance(codified_list_employes, facecodified)
+
+            print(distances)
+
+            # get the lower value
+            index_matches = numpy.argmin(distances)
+
+            # show matches
+            if distances[index_matches] > 0.6:
+                print("Does not match any of the employees")
+            else:
+                print("Welcome to the work")
+
+
+    key = cv2.waitKey(1)
+    if key == ord('q'):
+        break
