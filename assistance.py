@@ -68,8 +68,20 @@ while True:
             if distances[index_matches] > 0.6:
                 print("Does not match any of the employees")
             else:
-                print("Welcome to the work")
+                # find the employe's name found
+                name = employes_name[index_matches]
 
+                # show rectangle and employe's name in screenshot
+                y1, x2, y2, x1 = facelocation
+                cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.rectangle(image, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
+                cv2.putText(image, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+
+                # show the screenshot got
+                cv2.imshow('Web cam', image)
+
+                # keep screen opened
+                cv2.waitKey(0)
 
     key = cv2.waitKey(1)
     if key == ord('q'):
