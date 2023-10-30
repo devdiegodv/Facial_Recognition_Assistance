@@ -2,6 +2,7 @@ from cv2 import cv2
 import face_recognition as fr
 import os
 import numpy
+from datetime import datetime
 
 # create database
 path = 'employes'
@@ -33,6 +34,22 @@ def codify(images):
         codified_list.append(codified)
 
     return codified_list
+
+# log assistance
+def log_assistance(person):
+    f = open('log.csv', 'r+')
+    data_list = f.readlines()
+    names_log = []
+
+    for line in data_list:
+        log = line.split(',')
+        names_log.append(log[0])
+
+    # avoid duplicated names
+    if person not in names_log:
+        now = datetime.now()
+        string_now = now.strftime('%H:%M:%S')
+        f.writelines(f'\n{person}, {string_now}')
 
 codified_list_employes = codify(my_images)
 
@@ -76,6 +93,8 @@ while True:
                 cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.rectangle(image, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
                 cv2.putText(image, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+
+                log_assistance(name)
 
                 # show the screenshot got
                 cv2.imshow('Web cam', image)
