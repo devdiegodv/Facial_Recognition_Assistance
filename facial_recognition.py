@@ -3,7 +3,7 @@ import face_recognition as fr
 
 # load images
 image_control = fr.load_image_file('images/imageB.jpg')
-image_test = fr.load_image_file('images/imageC.jpg')
+image_test = fr.load_image_file('images/imageA.jpg')
 
 # transform color
 image_control = cv2.cvtColor(image_control, cv2.COLOR_BGR2RGB)
@@ -28,6 +28,21 @@ cv2.rectangle(image_test,
               (place_face_B[1], place_face_B[2]),
               (0, 255, 0),
               2)
+
+# check comparation
+result = fr.compare_faces([codified_face_A], codified_face_B)
+
+# distance between photos
+distance = fr.face_distance([codified_face_A], codified_face_B)
+
+# show results
+cv2.putText(image_test,
+            f'{result} {distance.round(2)}',
+            (50, 50), # location on screen
+            cv2.FONT_HERSHEY_COMPLEX,
+            1,
+            (0, 255, 0),
+            2)
 
 # show images
 cv2.imshow('Image 1', image_control)
